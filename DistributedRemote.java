@@ -20,7 +20,13 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 		read[i]=-1;
 	}
 	public void lock(){
-		System.out.println("*****************Writer started writing, Readers on hold*****************");
+		System.out.print("*****************Writer started writing, Reader ");
+		for(int i = 1 ; i <= 2 ; i++)		
+		{
+			if(read[i]==1)
+				System.out.print(i+" ");
+		}
+		System.out.print("on hold*****************\n");
 		_lock = 1;
 	}
 	public void release(){
