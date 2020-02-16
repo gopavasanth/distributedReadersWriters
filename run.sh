@@ -1,5 +1,6 @@
 #!/bin/bash
 javac *.java
+rm -rf content
 rmic DistributedRemote
 rmiregistry 5000
 

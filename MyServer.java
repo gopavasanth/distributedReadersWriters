@@ -1,15 +1,22 @@
 import java.rmi.*;
 import java.rmi.registry.*;
 
+import java.net.InetAddress; 
+
 public class MyServer{
 
-public static void main(String args[]){
-try{
-System.setProperty("java.rmi.server.hostname","10.113.8.115");
-Distributed stub=new DistributedRemote();
-Naming.rebind("rmi://localhost:5000/run",stub);
+    public static void main(String args[]){
+        try{
+            InetAddress localhost = InetAddress.getLocalHost(); 
+            var ip=localhost.getHostAddress().trim();
 
-}catch(Exception e){System.out.println(e);}
-}
+            System.setProperty("java.rmi.server.hostname",ip);
+            Distributed stub=new DistributedRemote();
+            Naming.rebind("rmi://localhost:5000/run",stub);
+
+        } catch(Exception e){
+            System.out.println(e);
+        }
+    }
 
 }
