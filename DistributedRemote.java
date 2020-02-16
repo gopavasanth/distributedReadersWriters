@@ -10,6 +10,15 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 	DistributedRemote()throws RemoteException{
 	super();
 	}
+	public void readingControl(int i,boolean flag){
+		if(flag == false)
+			stopReading(i);
+		else
+			reading(i);
+	}
+	public void stopReading(int i){
+		read[i]=-1;
+	}
 	public void lock(){
 		System.out.println("*****************Writer started writing, Readers on hold*****************");
 		_lock = 1;
@@ -41,6 +50,11 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 					{
 						System.out.println("*****************Reader "+i+" started reading*****************");
 						read[i]=1;
+					}
+					else if(read[i]==-1)
+					{
+						read[i]=0;
+						break;
 					}
 	    				System.out.println("Reader "+i+" reads "+sc.next());
 					TimeUnit.SECONDS.sleep(2);
