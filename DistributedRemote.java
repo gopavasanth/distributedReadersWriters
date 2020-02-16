@@ -26,7 +26,7 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 	public void release(){
 		read[1]=read[2]=0;
 		_lock = 0;
-		System.out.println("*****************Writer finished writing, Readers continue to read if any*****************");
+		System.out.println("*****************Writer finished writing*****************");
 	}
 	public void writing(String input){
 		try{    
@@ -54,6 +54,7 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 					else if(read[i]==-1)
 					{
 						read[i]=0;
+						System.out.println("*****************Reader "+i+" reading incomplete*****************");
 						break;
 					}
 	    				System.out.println("Reader "+i+" reads "+sc.next());
@@ -61,7 +62,7 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 				}
 			}
 		}catch(Exception e){System.out.println(e);}
-		System.out.println("*****************Reader "+i+" finished reading*****************");
+		System.out.println("*****************Reader "+i+" exits*****************");
 	}
 
 }
