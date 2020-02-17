@@ -10,11 +10,24 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 	DistributedRemote()throws RemoteException{
 	super();
 	}
-	public void readingControl(int i,boolean flag){
-		if(flag == false)
-			stopReading(i);
-		else
+
+	public void readingControl(int i,String val){
+		if(val.equals("start"))
 			reading(i);
+		else if(val.equals("stop"))
+		{
+			stopReading(i);
+		}	
+		else if(val.equals("pause"))
+		{
+			System.out.println("*****************Reader "+i+" paused reading*****************");
+			read[i] = 2;
+		}
+		else if(val.equals("resume"))
+		{
+			System.out.println("*****************Reader "+i+" resumed reading*****************");
+			read[i]=1;
+		}
 	}
 	public void stopReading(int i){
 		read[i]=-1;
@@ -23,14 +36,17 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 		System.out.print("*****************Writer started writing, Reader ");
 		for(int i = 1 ; i <= 2 ; i++)		
 		{
-			if(read[i]==1)
+			if(read[i]==1 || read[i]==2)
 				System.out.print(i+" ");
 		}
 		System.out.print("on hold*****************\n");
 		_lock = 1;
 	}
 	public void release(){
-		read[1]=read[2]=0;
+		if(read[1]==1)
+			read[1]=0;
+		if(read[2]==1)
+			read[2]=0;
 		_lock = 0;
 		System.out.println("*****************Writer finished writing*****************");
 	}
@@ -52,19 +68,23 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 			{
 				if(_lock==0)
 				{
-					if(read[i] == 0)
-					{
-						System.out.println("*****************Reader "+i+" started reading*****************");
-						read[i]=1;
-					}
-					else if(read[i]==-1)
+					if(read[i]==-1)
 					{
 						read[i]=0;
 						System.out.println("*****************Reader "+i+" reading incomplete*****************");
 						break;
 					}
-	    				System.out.println("Reader "+i+" reads "+sc.next());
-					TimeUnit.SECONDS.sleep(2);
+					else if(read[i] == 0)
+					{
+						System.out.println("*****************Reader "+i+" started reading*****************");
+						read[i]=1;
+					}
+					
+					else if(read[i]==1)
+					{
+						System.out.println("Reader "+i+" reads "+sc.next());
+						TimeUnit.SECONDS.sleep(2);
+					}
 				}
 			}
 		}catch(Exception e){System.out.println(e);}
