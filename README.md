@@ -1,4 +1,4 @@
-Open in terminal and execute the following commands:
+Open terminal and execute the following commands:
 
 `chmod +x *`
 
@@ -8,6 +8,5 @@ Open in terminal and execute the following commands:
 
 `java Writer`
 
-`java Reader1`
+`java Reader`
 
-`java Reader2`
