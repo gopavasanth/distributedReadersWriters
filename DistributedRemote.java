@@ -5,7 +5,9 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 public class DistributedRemote extends UnicastRemoteObject implements Distributed{
 	
-	int _lock = 0;
+	int lockOn=1,lockOff=0;
+	int _lock = lockOff;
+	int reset=0,stop=-1,reading=1,pause=2;
 	int read[] = {0, 0, 0};
 	DistributedRemote()throws RemoteException{
 	super();
@@ -21,33 +23,33 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 		else if(val.equals("pause"))
 		{
 			System.out.println("*****************Reader "+i+" paused reading*****************");
-			read[i] = 2;
+			read[i] = pause;
 		}
 		else if(val.equals("resume"))
 		{
 			System.out.println("*****************Reader "+i+" resumed reading*****************");
-			read[i]=1;
+			read[i]=reading;
 		}
 	}
 	public void stopReading(int i){
-		read[i]=-1;
+		read[i]=stop;
 	}
 	public void lock(){
 		System.out.print("*****************Writer started writing, Reader ");
 		for(int i = 1 ; i <= 2 ; i++)		
 		{
-			if(read[i]==1 || read[i]==2)
+			if(read[i]==reading || read[i]==pause)
 				System.out.print(i+" ");
 		}
 		System.out.print("on hold*****************\n");
-		_lock = 1;
+		_lock = lockOn;
 	}
 	public void release(){
-		if(read[1]==1)
-			read[1]=0;
-		if(read[2]==1)
-			read[2]=0;
-		_lock = 0;
+		if(read[1]==reading)
+			read[1]=reset;
+		if(read[2]==reading)
+			read[2]=reset;
+		_lock = lockOff;
 		System.out.println("*****************Writer finished writing*****************");
 	}
 	public void writing(String input){
@@ -66,21 +68,21 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 	
 	   		while (sc.hasNext()) 
 			{
-				if(_lock==0)
+				if(_lock==lockOff)
 				{
-					if(read[i]==-1)
+					if(read[i]==stop)
 					{
-						read[i]=0;
+						read[i]=reset;
 						System.out.println("*****************Reader "+i+" reading incomplete*****************");
 						break;
 					}
-					else if(read[i] == 0)
+					else if(read[i] == reset)
 					{
 						System.out.println("*****************Reader "+i+" started reading*****************");
-						read[i]=1;
+						read[i]=reading;
 					}
 					
-					else if(read[i]==1)
+					else if(read[i]==reading)
 					{
 						System.out.println("Reader "+i+" reads "+sc.next());
 						TimeUnit.SECONDS.sleep(2);
