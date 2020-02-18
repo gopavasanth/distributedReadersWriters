@@ -1,12 +1,12 @@
 Open terminal and execute the following commands:
 
-`chmod +x *`
+`$ chmod +x *`
 
-`./run.sh`
+`$ ./run.sh`
 
-`java MyServer`
+`$ java MyServer`
 
-`java Writer`
+`$ java Writer`
 
-`java Reader`
+`$ java Reader`
 
