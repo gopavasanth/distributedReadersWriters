@@ -10,27 +10,28 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 	int reset=0,stop=-1,reading=1,pause=2;
 	int read[] = {0, 0, 0};
 	DistributedRemote()throws RemoteException{
-	super();
+		super();
 	}
 
-	public void readingControl(int i,String val){
-		if(val.equals("start"))
-			reading(i);
-		else if(val.equals("stop"))
-		{
-			stopReading(i);
-		}	
-		else if(val.equals("pause"))
-		{
-			System.out.println("*****************Reader "+i+" paused reading*****************");
-			read[i] = pause;
-		}
-		else if(val.equals("resume"))
-		{
-			System.out.println("*****************Reader "+i+" resumed reading*****************");
-			read[i]=reading;
+	public void readingControl(int i, String val){
+		switch(val){
+			case "start":
+				reading(i);
+				break;
+			case "pause":
+				System.out.println("*****************Reader "+i+" paused reading*****************");
+				read[i] = pause;
+				break;
+			case "stop":
+				stopReading(i);
+				break;
+			case "resume":
+				System.out.println("*****************Reader "+i+" resumed reading*****************");
+				read[i]=reading;
+				break;
 		}
 	}
+
 	public void stopReading(int i){
 		read[i]=stop;
 	}
