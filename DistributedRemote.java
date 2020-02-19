@@ -71,22 +71,21 @@ public class DistributedRemote extends UnicastRemoteObject implements Distribute
 			{
 				if(_lock==lockOff)
 				{
-					if(read[i]==stop)
-					{
-						read[i]=reset;
-						System.out.println("*****************Reader "+i+" reading incomplete*****************");
-						break;
-					}
-					else if(read[i] == reset)
-					{
-						System.out.println("*****************Reader "+i+" started reading*****************");
-						read[i]=reading;
-					}
-					
-					else if(read[i]==reading)
-					{
-						System.out.println("Reader "+i+" reads "+sc.next());
-						TimeUnit.SECONDS.sleep(2);
+					int status=read[i];
+					// int reset=0, stop=-1,reading=1;
+					switch(status){
+						case -1:
+							read[i]=reset;
+							System.out.println("*****************Reader "+i+" reading incomplete*****************");
+							break;
+						case 0:
+							System.out.println("*****************Reader "+i+" started reading*****************");
+							read[i]=reading;
+							break;
+						case 1:
+							System.out.println("Reader "+i+" reads "+sc.next());
+							TimeUnit.SECONDS.sleep(2);
+							break;
 					}
 				}
 			}
