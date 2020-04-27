@@ -1,4 +1,4 @@
-Open terminal and execute the following commands:
+Open terminal for each command and execute the following:
 
 `$ chmod +x *`
 
@@ -9,4 +9,6 @@ Open terminal and execute the following commands:
 `$ java Writer`
 
 `$ java Reader`
+For Reader it will be prompted with id, for one command give the id as 1 and for the second reader give the id as 2.
+Now you can use the phrases like "pause", "resume" and "stop" for the reader.
 
